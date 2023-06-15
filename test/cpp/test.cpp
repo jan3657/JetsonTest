@@ -26,20 +26,14 @@ std::string executeCommand(const std::string& command) {
     } else {
         return "Failed to open the temp output file";
     }
-    
-    return output;
-}
-
-std::string test(std::string command){
-    std::string output = executeCommand(command);
 
     if (!output.empty()) {
         return output;
     } else {
         return "No output from the script" ;
     }
-
 }
+
 
 std::string ipAddresses[] = {
         "46.122.11.22",
@@ -50,11 +44,12 @@ std::string ipAddresses[] = {
         "46.122.11.27"
     };
 
+
 TEST_CASE("Testing Ping"){
     for (const auto& ip : ipAddresses) {
         std::string command = std::string("bash ../../src/pingTest.sh ").append(ip);
         INFO("Device ip :",ip);
-        CHECK(test(command) == "successful");
+        CHECK(executeCommand(command) == "successful");
     }
     
 }
@@ -63,7 +58,7 @@ TEST_CASE("Testing SSH"){
     for (const auto& ip : ipAddresses) {
         std::string command = std::string("bash ../../src/sshTest.sh ").append(ip);
         INFO("Device ip :",ip);
-        CHECK(test(command) == "successful");
+        CHECK(executeCommand(command) == "successful");
     }
     
 }
