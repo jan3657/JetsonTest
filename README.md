@@ -17,7 +17,8 @@ Calling the bash script from c++ and using doctest to do the unit testing.
 - [ ] USB relinking (soft link)
 - [ ] stress testing (Open more http stream sockets)
 - [ ] Stress testing ( 50 % extra cpu load )
-- [ ] Speed test 
+- [ ] Speed test
+- [ ] Watchdog (Spanje )
 
 
 
