@@ -20,17 +20,57 @@ Calling the bash script from c++ and using doctest to do the unit testing.
 - [ ] Speed test 
 
 
-<h3> Command line options </h3>  
 
---list-test-cases          //List test case names  
---test-case= <math>,<util> //Execute only matching tests   
---abort-after=10           //stop tests after 10 failures   
---out=<string>             //output resoults to file  
---count                    //get number of tests  
---help                     //get list of all command line options  
  
  
- # Documentation
- 
- 
- 
+ # Get started
+ 1) Clone the repo : `git clone https://github.com/jan3657/JetsonTest.git`
+ 2) Build : `make`
+ 3) Run the tests with : `./test.exe`
+
+ <h3> Command line flag options </h3>  
+
+`./test.exe --list-test-cases`          //List test case names  
+`./test.exe --test-case= <math>,<util>` //Execute only matching tests   
+`./test.exe --abort-after=10`           //stop tests after 10 failures   
+`./test.exe --out=<string>`             //output resoults to file  
+`./test.exe --count`                    //get number of tests  
+`./test.exe--help`                      //get list of all command line options  
+
+
+ # Documentation 
+
+1) **Function:** `executeCommand`
+
+**Description:**
+
+This function executes a command in the shell and captures the output. It redirects the output to a temporary file and then reads the content of the file to retrieve the output. The function returns the output of the command as a string.
+
+**parameters:**
+
+
+    command (const std::string&): The command to be executed in the shell.
+
+**Return Value:**
+
+    std::string: The output of the executed command.
+
+**Exceptions:**
+
+    - If the command execution fails, the function returns the error message "Failed to execute the command".
+    - If the temporary output file fails to open, the function returns the error message "Failed to open the temp output file".
+    - If the output of the command is empty, the function returns the error message "No output from the script".
+
+ **Example usage**
+ ```c++
+
+ std::string result = executeCommand("bash ../../src/pingTest.sh ");
+```
+
+2) **How to make new tests:**
+    - Add a new TEST_CASE macro to define the new test case.
+      Choose an appropriate name for the test case that describes its purpose.
+    - Inside the new test case, use a loop to iterate over the ipAddresses.
+    - Construct the command specific to the test case using the desired script or command and the IP address.
+    - Use executeCommand function to execute the command and capture the output.
+    - Compare the output with the expected result using the CHECK macro.
