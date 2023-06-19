@@ -25,6 +25,8 @@ Calling the bash script from c++ and using doctest to do the unit testing.
  
  
  # Get started
+ Install <nlohmann/json.hpp> with 'sudo apt-get install libjsoncpp-dev' for json parsing
+ Install <curl/curl.h> with 'sudo apt-get install libcurl4-openssl-dev' for sending api requests
  1) Clone the repo : `git clone https://github.com/jan3657/JetsonTest.git`
  2) Build : `make`
  3) Run the tests with : `./test.exe`
