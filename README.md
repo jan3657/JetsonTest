@@ -9,7 +9,7 @@ Calling the bash script from c++ and using doctest to do the unit testing.
 
 - [x] Pinging the device  
 - [x] SSH 
-- [ ] Firewall 
+- [x] Firewall 
 - [ ] VDS service status  
 - [ ] Sauron status  
 - [ ] http server test  
