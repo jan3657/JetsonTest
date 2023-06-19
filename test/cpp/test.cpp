@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <fstream>
 #include <string>
+#include <curl/curl.h>
+#include <nlohmann/json.hpp>
 
 
 std::string executeCommand(const std::string& command) {
@@ -36,40 +38,15 @@ std::string executeCommand(const std::string& command) {
 
 
 std::string ipAddresses[] = {
-        "10.0.1.78"
-        //"46.122.11.22",
-        //"46.122.11.23",
+        "10.0.1.78",
+        "46.122.11.22",
+        "46.122.11.23"
         //"46.122.11.24",
         //"46.122.11.25",
         //"46.122.11.26",
         //"46.122.11.27"
     };
 
-
-/*
-TEST_CASE("Testing Ping"){
-    for (const auto& ip : ipAddresses) {
-        std::string command = std::string("bash ../../src/pingTest.sh ").append(ip);
-        INFO("Device ip :",ip);
-        CHECK(executeCommand(command) == "successful");
-    }
-}
-TEST_CASE("Testing SSH"){
-    for (const auto& ip : ipAddresses) {
-        std::string command = std::string("bash ../../src/sshTest.sh ").append(ip);
-        INFO("Device ip :",ip);
-        CHECK(executeCommand(command) == "successful");      
-    }
-}
-
-TEST_CASE("Testing if ip rule is up"){
-    for (const auto& ip : ipAddresses) {
-        std::string command = std::string("bash ../../src/iptablesRuleTest.sh ").append(ip);
-        INFO("Device ip :",ip);
-        CHECK(executeCommand(command) == "successful");
-    }
-}
-*/
 
 TEST_CASE("Testing devices"){
     for (const auto& ip : ipAddresses) {
@@ -90,5 +67,44 @@ TEST_CASE("Testing devices"){
     }
 }
 
+using json = nlohmann::json;
 
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
+    size_t total_size = size * nmemb;
+    output->append(static_cast<char*>(contents), total_size);
+    return total_size;
+}
 
+void getStatus(const std::string& ip) {
+    CURL* curl = curl_easy_init();
+    std::string url = ip + "/status";
+    std::string response;
+
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+        CURLcode res = curl_easy_perform(curl);
+        if (res == CURLE_OK) {
+            // Parse the JSON response
+            json data = json::parse(response);
+
+            // Extract the required values
+            bool isListeningToYOLO = data["appState"]["isListeningToYOLO"];
+            bool isRecording = data["appState"]["recordingStatus"]["isRecording"];
+            bool isStarted = data["appState"]["yoloStatus"]["isStarted"];
+            bool isStarting = data["appState"]["yoloStatus"]["isStarting"];
+
+            // Print the values
+            std::cout << "isListeningToYOLO: " << isListeningToYOLO << std::endl;
+            std::cout << "isRecording: " << isRecording << std::endl;
+            std::cout << "isStarted: " << isStarted << std::endl;
+            std::cout << "isStarting: " << isStarting << std::endl;
+        } else {
+            std::cerr << "Failed to perform request: " << curl_easy_strerror(res) << std::endl;
+        }
+
+        curl_easy_cleanup(curl);
+    }
+}

@@ -6,7 +6,7 @@ PASSWORD="${3:-soca}"
 
 # Check if IP address is provided
 if [ -z "$IP" ]; then
-    echo "Please provide the IP address as the first parameter."
+    echo "Please provide the IP address to iptablesRuleTest script as the first parameter."
     exit 1
 fi
 
