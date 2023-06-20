@@ -12,7 +12,7 @@ Calling the bash script from c++ and using doctest to do the unit testing.
 - [x] Firewall 
 - [x] VDS service status  
 - [x] Sauron status  
-- [ ] http server test  
+- [x] http server test  
 - [ ] lte connection strenght script test 
 - [ ] USB relinking (soft link)
 - [ ] stress testing (Open more http stream sockets)
