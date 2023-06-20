@@ -81,15 +81,24 @@ std::array<bool,4> * getStatus(const std::string & ip) {
     return(statusArray);
 }
 
-std::string ipAddresses[] = {
-        "10.0.1.78"
-        //"46.122.11.22",
-        //"46.122.11.23"
-        //"46.122.11.24",
-        //"46.122.11.25",
-        //"46.122.11.26",
-        //"46.122.11.27"
-    };
+std::vector<std::string> readIPAddressesFromFile(const std::string& filename) {
+    std::vector<std::string> ipAddresses;
+    std::ifstream file(filename);
+
+    if (file.is_open()) {
+        std::string ipAddress;
+        while (std::getline(file, ipAddress)) {
+            ipAddresses.push_back(ipAddress);
+        }
+        file.close();
+    } else {
+        std::cerr << "Failed to open file: " << filename << std::endl;
+    }
+
+    return ipAddresses;
+}
+
+std::vector<std::string> ipAddresses = readIPAddressesFromFile("devices.txt");
 
 
 TEST_CASE("Testing devices"){
