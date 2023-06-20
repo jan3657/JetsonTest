@@ -37,10 +37,54 @@ std::string executeCommand(const std::string& command) {
 }
 
 
+using json = nlohmann::json;
+
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
+    size_t total_size = size * nmemb;
+    output->append(static_cast<char*>(contents), total_size);
+    return total_size;
+}
+
+std::array<bool,4> * getStatus(const std::string & ip) {
+    CURL* curl = curl_easy_init();
+    std::string url = ip + "/status";
+    std::string response;
+
+    std::array<bool,4> * statusArray = new std::array<bool, 4>();
+    (*statusArray)[0] = false;
+    (*statusArray)[1] = false;
+    (*statusArray)[2] = false;
+    (*statusArray)[3] = false;
+
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+        CURLcode res = curl_easy_perform(curl);
+        if (res == CURLE_OK) {
+            // Parse the JSON response
+            json data = json::parse(response);
+
+            // Extract the required values
+            (*statusArray)[0] = data["appState"]["isListeningToYOLO"];
+            (*statusArray)[1] = data["appState"]["recordingStatus"]["isRecording"];
+            (*statusArray)[2] =data["appState"]["yoloStatus"]["isStarted"];
+            (*statusArray)[3] = data["appState"]["yoloStatus"]["isStarting"];
+        }
+        else{
+            std::cerr << "Failed to perform request: " << curl_easy_strerror(res) << std::endl;
+        }
+
+        curl_easy_cleanup(curl);
+    }
+    return(statusArray);
+}
+
 std::string ipAddresses[] = {
-        "10.0.1.78",
-        "46.122.11.22",
-        "46.122.11.23"
+        "10.0.1.78"
+        //"46.122.11.22",
+        //"46.122.11.23"
         //"46.122.11.24",
         //"46.122.11.25",
         //"46.122.11.26",
@@ -64,47 +108,18 @@ TEST_CASE("Testing devices"){
             std::string command = std::string("bash ../../src/iptablesRuleTest.sh ").append(ip);
             CHECK(executeCommand(command) == "successful"); 
         }
-    }
-}
-
-using json = nlohmann::json;
-
-size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output) {
-    size_t total_size = size * nmemb;
-    output->append(static_cast<char*>(contents), total_size);
-    return total_size;
-}
-
-void getStatus(const std::string& ip) {
-    CURL* curl = curl_easy_init();
-    std::string url = ip + "/status";
-    std::string response;
-
-    if (curl) {
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-
-        CURLcode res = curl_easy_perform(curl);
-        if (res == CURLE_OK) {
-            // Parse the JSON response
-            json data = json::parse(response);
-
-            // Extract the required values
-            bool isListeningToYOLO = data["appState"]["isListeningToYOLO"];
-            bool isRecording = data["appState"]["recordingStatus"]["isRecording"];
-            bool isStarted = data["appState"]["yoloStatus"]["isStarted"];
-            bool isStarting = data["appState"]["yoloStatus"]["isStarting"];
-
-            // Print the values
-            std::cout << "isListeningToYOLO: " << isListeningToYOLO << std::endl;
-            std::cout << "isRecording: " << isRecording << std::endl;
-            std::cout << "isStarted: " << isStarted << std::endl;
-            std::cout << "isStarting: " << isStarting << std::endl;
-        } else {
-            std::cerr << "Failed to perform request: " << curl_easy_strerror(res) << std::endl;
+        std::array<bool,4> * sauronSatus= getStatus(ip);
+        SUBCASE("Suron is isListeningToYOLO"){
+            CHECK((*sauronSatus)[0] == 1);
         }
-
-        curl_easy_cleanup(curl);
+        SUBCASE("Suron is Recording"){
+            CHECK((*sauronSatus)[1] == 1);
+        }
+        SUBCASE("Suron Yolo is Started"){
+            CHECK((*sauronSatus)[2] == 1);
+        }
+        SUBCASE("Suron Yolo is Starting"){
+            CHECK((*sauronSatus)[3] == 0);
+        }
     }
 }
