@@ -85,69 +85,85 @@ This test verifies the ability to ping the specified IP address.
 
 1) Execute the command bash ../../src/pingTest.sh <ip_address>.  
 2) Capture the output of the command execution.   
-3) Check if the output is equal to ``successful``.
+3) Check if the output is equal to "successful".
    
 <h4>Expected Result</h4>
-The output of the command execution should be "successful".
+
+The output of the command execution should be ``successful``.
 
 <h3>SSH</h3>
 This test verifies the ability to establish an SSH connection to the specified IP address.
 
-<h4>Test Steps</h4>
-Execute the command bash ../../src/sshTest.sh <ip_address>.
-Capture the output of the command execution.
-Check if the output is equal to "successful".
+<h4>Test Steps</h4>  
+
+1) Execute the command bash ../../src/sshTest.sh <ip_address>.
+2) Capture the output of the command execution.
+3) Check if the output is equal to "successful".
  
 <h4>Expected Result</h4>
-The output of the command execution should be "successful".
+
+The output of the command execution should be ``successful``.
 
 <h3>IP rule</h3>
 This test verifies the existence of a specific IP rule on the specified IP address.
 
 <h4>Test Steps</h4>
-Execute the command bash ../../src/iptablesRuleTest.sh <ip_address>.
-Capture the output of the command execution.
-Check if the output is equal to "successful".
+1) Execute the command bash ../../src/iptablesRuleTest.sh <ip_address>.
+2) Capture the output of the command execution.
+3) Check if the output is equal to "successful".
  
 <h4>Expected Result</h4>
-The output of the command execution should be "successful".
+
+The output of the command execution should be ``successful``.
 
 <h3>Sauron</h3>
 This test retrieves the status of various components of the Sauron system on the specified IP address.
 
 <h4>Test Steps</h4>
-Retrieve the status of Sauron components using the function getStatus(<ip_address>).
-Check the following status values:
-isListeningToYOLO: Check if it is equal to 1.
-isRecording: Check if it is equal to 1.
-isStarted: Check if it is equal to 1.
-isStarting: Check if it is equal to 0.
+
+1) Retrieve the status of Sauron components using the function getStatus(<ip_address>).  
+2) Check the following status values:  
+3) isListeningToYOLO: Check if it is equal to 1.  
+4) isRecording: Check if it is equal to 1.  
+5) isStarted: Check if it is equal to 1.  
+6) isStarting: Check if it is equal to 0.  
  
 <h4>Expected Results</h4>
-isListeningToYOLO: Expected to be 1.
-isRecording: Expected to be 1.
-isStarted: Expected to be 1.
-isStarting: Expected to be 0.
+
+isListeningToYOLO: Expected to be ``1``.  
+isRecording: Expected to be ``1``.  
+isStarted: Expected to be ``1``.  
+isStarting: Expected to be ``0``.  
  
 <h3>Signal strength</h3>
 This test checks the signal quality of the specified IP address.
 
 <h4>Test Steps</h4>
-Execute the command bash ../../src/signalQualityTest.sh <ip_address>.
-Capture the output of the command execution.
-Check if the output is not equal to "0" (indicating a successful signal quality).
+
+1) Execute the command bash ../../src/signalQualityTest.sh <ip_address>.  
+2) Capture the output of the command execution.  
+3) Check if the output is not equal to "0" (indicating a successful signal quality).  
+
 <h4>Expected Result</h4>
-The output of the command execution should not be "0".
+
+The output of the command execution should not be ``0``.
 
 <h3>USB-Softlink</h3> (udev rules)
+
 This test verifies the existence of USB-Softlink udev rules on the specified IP address.
 
 <h4>Test Steps</h4>
-Execute the command bash ../../src/udevRulesTest.sh <ip_address>.
-Capture the output of the command execution.
-Check if the output is equal to "successful".
+
+1) Execute the command bash ../../src/udevRulesTest.sh <ip_address>.  
+2) Capture the output of the command execution.  
+3) Check if the output is equal to "successful".  
  
 <h4>Expected Result</h4>
-The output of the command execution should be "successful".
+
+The output of the command execution should be ``successful``.
 
 Note: Replace <ip_address> with the actual IP address you want to test in each test case.
+
+# **Test report on 10.0.1.81**
+
+![Screenshot from 2023-06-27 12-35-29](https://github.com/jan3657/JetsonTest/assets/57140292/d82ac018-dd7c-478c-91f4-853b31ed0d73)
