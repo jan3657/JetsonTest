@@ -14,11 +14,10 @@ Calling the bash script from c++ and using doctest to do the unit testing.
 - [x] Sauron status  
 - [x] http server test  
 - [x] lte connection strenght script test 
-- [ ] USB relinking (soft link)
+- [x] USB relinking (soft link)
 - [ ] stress testing (Open more http stream sockets)
 - [ ] Stress testing ( 50 % extra cpu load )
 - [ ] Speed test
-- [ ] Watchdog (Spanje )
 
 
 
