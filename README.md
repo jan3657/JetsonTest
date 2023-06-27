@@ -166,4 +166,4 @@ Note: Replace <ip_address> with the actual IP address you want to test in each t
 
 # **Test report on 10.0.1.81**
 
-![Screenshot from 2023-06-27 12-35-29](https://github.com/jan3657/JetsonTest/assets/57140292/d82ac018-dd7c-478c-91f4-853b31ed0d73)
+![Screenshot from 2023-06-27 12-58-48](https://github.com/jan3657/JetsonTest/assets/57140292/5182f1a6-27e7-487d-b694-65584162968c)
