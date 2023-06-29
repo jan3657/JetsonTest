@@ -125,15 +125,30 @@ void test_header(std::string test_case, std::string test_message)
 }
 void test_body(std::string command, std::string condition)
 {
+
     if (executeCommand(command) == condition)
     {
-        std::cout << "  Status: \033[1;32mPASS \033[1;36m CHECK(" + executeCommand(command) + " == " + condition + ")\033[1;0m" << std::endl;
+        std::cout << "  Status: \033[1;32mPASS \033[1;36m CHECK(" + executeCommand(command) + " == " + condition + "\033[1;0m" << std::endl;
     }
     else
     {
         std::cout << "  Status: \033[1;31mFAIL \033[1;36m CHECK(" + executeCommand(command) + " == " + condition + ")\033[1;0m" << std::endl;
     }
-    std::cout << "\033[1;33m=======================================================================+========\033[1;0m" << std::endl;
+    std::cout << "\033[1;33m================================================================================\033[1;0m" << std::endl;
+}
+
+void quiet_test(std::string test_case, std::string command, std::string condition)
+{
+    std::cout << "\033[1;33m TEST CASE: \033[1;0m  ";
+    std::cout << " " + test_case;
+    if (executeCommand(command) == condition)
+    {
+        std::cout << "\033[1;32m PASS \033[1;0m" << std::endl;
+    }
+    else
+    {
+        std::cout << "  Status: \033[1;31mFAIL \033[1;36m CHECK(" + executeCommand(command) + " == " + condition + ")\033[1;0m" << std::endl;
+    }
 }
 
 void test_device(std::string ip)
@@ -144,65 +159,73 @@ void test_device(std::string ip)
     std::cout << "\033[1;33m--------------------------------------------------------------------------------\033[1;0m" << std::endl;
 
     // Test Ping
-    test_header("Ping", "This test verifies the ability to ping the specified IP address");
     command = std::string("bash ../../src/pingTest.sh ").append(ip);
-    test_body(command, "successful");
+    // test_header("Ping", "This test verifies the ability to ping the specified IP address");
+    // test_body(command, "successful");
+    quiet_test("Ping", command, "successful");
 
     // Test SSH
-    test_header("SSH", "This test verifies the ability to establish an SSH connection to the specified IP address");
     command = std::string("bash ../../src/sshTest.sh ").append(ip);
-    test_body(command, "successful");
+    // test_header("SSH", "This test verifies the ability to establish an SSH connection to the specified IP address");
+    // test_body(command, "successful");
+    quiet_test("SSH", command, "successful");
 
     // Test IP rule
-    test_header("IP Rule", "This test verifies the existance of firewall rule");
     command = std::string("bash ../../src/iptablesRuleTest.sh ").append(ip);
-    test_body(command, "successful");
+    // test_header("IP Rule", "This test verifies the existance of firewall rule");
+    // test_body(command, "successful");
+    quiet_test("IP Rule", command, "successful");
 
     // Sauron
-    test_header("Sauron", "This test retrieves the status of various components of the Sauron system on the device");
+    // test_header("Sauron", "This test retrieves the status of various components of the Sauron system on the device");
     std::array<bool, 4> *sauronSatus = getStatus(ip);
 
-    std::cout << std::endl;
-    std::cout << "  Suron is isListeningToYOLO" << std::endl;
+    std::cout << "\033[1;33m TEST CASE: \033[1;0m  ";
+    std::cout << " Suron is isListeningToYOLO  ";
     if ((*sauronSatus)[0] == 1)
     {
-        std::cout << "  Status: \033[1;32mPASS\033[1;0m" << std::endl;
+        std::cout << "\033[1;32mPASS\033[1;0m" << std::endl;
     }
     else
     {
-        std::cout << "  Status: \033[1;31mFAIL\033[1;0m" << std::endl;
+        std::cout << "\033[1;31mFAIL\033[1;0m" << std::endl;
     }
-    std::cout << std::endl;
-    std::cout << "  Suron is Recording" << std::endl;
+
+    std::cout << "\033[1;33m TEST CASE: \033[1;0m  ";
+    std::cout << " Suron is Recording  ";
     if ((*sauronSatus)[1] == 1)
     {
-        std::cout << "  Status: \033[1;32mPASS\033[1;0m" << std::endl;
+        std::cout << "\033[1;32mPASS\033[1;0m" << std::endl;
     }
     else
     {
-        std::cout << "  Status: \033[1;31mFAIL\033[1;0m" << std::endl;
+        std::cout << "\033[1;31mFAIL\033[1;0m" << std::endl;
     }
-    std::cout << std::endl;
-    std::cout << "  Yolo is Started" << std::endl;
+
+    std::cout << "\033[1;33m TEST CASE: \033[1;0m  ";
+    std::cout << " Yolo is Started  ";
     if ((*sauronSatus)[2] == 1)
     {
-        std::cout << "  Status: \033[1;32mPASS\033[1;0m" << std::endl;
+        std::cout << "\033[1;32mPASS\033[1;0m" << std::endl;
     }
     else
     {
-        std::cout << "  Status: \033[1;31mFAIL\033[1;0m" << std::endl;
+        std::cout << "\033[1;31mFAIL\033[1;0m" << std::endl;
     }
 
     // Signal strenght
-    test_header("Signal strenght", "This test checks the signal quality of the specified device");
+    // test_header("Signal strenght", "This test checks the signal quality of the specified device");
+    std::cout << "\033[1;33m TEST CASE: \033[1;0m  ";
+    std::cout << " Signal strenght  ";
     command = std::string("bash ../../src/signalQualityTest.sh ").append(ip);
-    std::cout << "  Status: \033[1;33m \033[1;36m" + executeCommand(command) + "\033[1;0m" << std::endl;
-    std::cout << "\033[1;33m=======================================================================+========\033[1;0m" << std::endl;
+    std::cout << "  \033[1;33m \033[1;36m" + executeCommand(command) + "\033[1;0m" << std::endl;
+    // std::cout << "\033[1;33m=======================================================================+========\033[1;0m" << std::endl;
 
     // Test IP rule
-    test_header("USB-Softlink (udev rules)", "This test verifies the existance of USB-Softlink udev rules on the specified IP address");
     command = std::string("bash ../../src/udevRulesTest.sh ").append(ip);
-    test_body(command, "successful");
+    // test_header("USB-Softlink (udev rules)", "This test verifies the existance of USB-Softlink udev rules on the specified IP address");
+    // test_body(command, "successful");
+    quiet_test("USB-Softlink (udev rules)", command, "successful");
 }
 
 int main()
